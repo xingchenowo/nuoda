@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>神秘的纸条</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义主题 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: '#f8f2e4',
+            glow: {
+              primary: '#a0d8ff'
+            },
+            vintage: {
+              dark: '#2d2821',
+              medium: '#5c5447',
+              light: '#d4c8b0'
+            }
+          },
+          fontFamily: {
+            medieval: ['Garamond', 'Georgia', 'serif'],
+            title: ['"Playfair Display"', 'serif']
+          },
+          boxShadow: {
+            'glow': '0 0 12px rgba(160, 216, 255, 0.6)'
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .paper-texture {
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4c8b0' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
+      }
+      .text-radiance {
+        text-shadow: 0 0 6px currentColor, 0 0 12px currentColor;
+      }
+      .aged-edge {
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1), 
+                    inset 0 0 20px rgba(92, 84, 71, 0.08);
+      }
+      .fiber-edge::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 12px;
+        background: linear-gradient(to left, rgba(212, 200, 176, 0.2), transparent);
+      }
+      .turtle-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.08;
+        z-index: 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-vintage-dark to-vintage-medium min-h-screen flex flex-col items-center justify-center p-4 font-medieval text-white">
+  <!-- 页面标题 -->
+  <header class="mb-6 text-center">
+    <h1 class="text-[clamp(1.7rem,4vw,2.8rem)] font-title tracking-wide mb-2">神秘的纸条</h1>
+    <p class="text-vintage-light max-w-lg mx-auto">电脑端：用鼠标划过纸条<br>手机端：长按中心复制内容</p>
+  </header>
+
+  <!-- 主要交互区域 -->
+  <main class="relative w-full max-w-2xl">
+    <!-- 纸条容器 -->
+    <div class="relative mx-auto w-full aspect-[4/3] max-w-md mb-6">
+      <!-- 纸条 -->
+      <div id="parchment" class="paper-texture bg-parchment aged-edge w-full h-full p-6 md:p-8 relative fiber-edge overflow-hidden cursor-crosshair">
+        <!-- 乌龟水印 -->
+        <div class="turtle-watermark">
+          <svg width="180" height="180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 乌龟身体 -->
+            <ellipse cx="50" cy="50" rx="35" ry="25" fill="#5c5447"/>
+            <!-- 乌龟壳 -->
+            <ellipse cx="50" cy="45" rx="30" ry="20" fill="#4a4438"/>
+            <!-- 壳上图案 -->
+            <path d="M50 25 L50 65 M20 45 L80 45 M30 35 L70 55 M30 55 L70 35" stroke="#5c5447" stroke-width="2"/>
+            <circle cx="50" cy="45" r="8" fill="#5c5447"/>
+            <!-- 头部 -->
+            <ellipse cx="80" cy="50" rx="8" ry="6" fill="#5c5447"/>
+            <!-- 四肢 -->
+            <ellipse cx="25" cy="30" rx="5" ry="4" fill="#5c5447"/>
+            <ellipse cx="25" cy="70" rx="5" ry="4" fill="#5c5447"/>
+            <ellipse cx="70" cy="30" rx="5" ry="4" fill="#5c5447"/>
+            <ellipse cx="70" cy="70" rx="5" ry="4" fill="#5c5447"/>
+            <!-- 尾巴 -->
+            <path d="M15 50 Q10 48 8 50 Q10 52 15 50" fill="#5c5447"/>
+          </svg>
+        </div>
+        
+        <!-- 隐秘标记 -->
+        <div class="absolute bottom-3 right-3 w-5 h-2.5 rounded-full border-2 border-vintage-light border-t-0 opacity-50"></div>
+        
+        <!-- 文字显示区域 -->
+        <div id="message-area" class="w-full h-full flex items-center justify-center relative z-10">
+          <p id="hidden-message" class="text-[clamp(0.9rem,3vw,1.2rem)] text-center opacity-0 leading-relaxed transition-opacity duration-1500"></p>
+        </div>
+        
+        <!-- 长按提示（移动端） -->
+        <div id="long-press-hint" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-vintage-medium opacity-0 transition-opacity duration-300 z-10">
+          长按复制
+        </div>
+        
+        <!-- 滑动轨迹效果 -->
+        <div id="light-trail" class="absolute pointer-events-none rounded-full opacity-0 transition-opacity duration-200"></div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- 页脚 -->
+  <footer class="mt-8 text-center text-vintage-light/50 text-xs">
+    <p></p>
+  </footer>
+
+  <script>
+    // 获取页面元素
+    const parchment = document.getElementById('parchment');
+    const lightTrail = document.getElementById('light-trail');
+    const hiddenMessage = document.getElementById('hidden-message');
+    const longPressHint = document.getElementById('long-press-hint');
+    
+    // 配置参数
+    const currentGlow = 'primary';
+    let isShowing = false;
+    let messageTimeout;
+    let trailFadeTimeout;
+    let pressTimer = null;
+    let movementCounter = 0; // 用于检测有效移动
+    const requiredMovement = 3; // 需要的最小移动次数才显示文字
+    
+    // 隐藏的秘密消息库
+    const secretMessages = [
+      "阻止他们通往新世界！！！星尘就交给你们了，s**v"
+    ];
+    
+    // 随机选择一条初始消息
+    let currentSecret = secretMessages[Math.floor(Math.random() * secretMessages.length)];
+    
+    // 处理鼠标移动，创建光轨效果
+    parchment.addEventListener('mousemove', (e) => {
+      // 检查鼠标是否在纸条上方
+      const rect = parchment.getBoundingClientRect();
+      const isOverParchment = e.clientX >= rect.left && e.clientX <= rect.right &&
+                             e.clientY >= rect.top && e.clientY <= rect.bottom;
+      
+      if (isOverParchment) {
+        // 计算鼠标在纸条内的相对位置
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // 设置光轨位置和样式
+        lightTrail.style.left = `${x}px`;
+        lightTrail.style.top = `${y}px`;
+        lightTrail.style.width = '18px';
+        lightTrail.style.height = '18px';
+        lightTrail.style.backgroundColor = `var(--tw-color-glow-${currentGlow})`;
+        lightTrail.style.opacity = '0.7';
+        
+        // 清除之前的淡出计时器
+        clearTimeout(trailFadeTimeout);
+        
+        // 光轨淡出效果
+        trailFadeTimeout = setTimeout(() => {
+          lightTrail.style.opacity = '0';
+        }, 100);
+        
+        // 计数移动次数，只有足够的移动才显示文字
+        movementCounter++;
+        if (!isShowing && movementCounter >= requiredMovement) {
+          revealMessage();
+        }
+      } else {
+        // 鼠标离开纸条，重置计数器并隐藏光轨
+        movementCounter = 0;
+        lightTrail.style.opacity = '0';
+      }
+    });
+    
+    // 鼠标离开纸条时重置状态
+    parchment.addEventListener('mouseleave', () => {
+      movementCounter = 0;
+    });
+    
+    // 显示秘密消息
+    function revealMessage() {
+      isShowing = true;
+      
+      // 设置消息内容和样式
+      hiddenMessage.textContent = currentSecret;
+      hiddenMessage.style.color = `var(--tw-color-glow-${currentGlow})`;
+      hiddenMessage.classList.add('text-radiance');
+      
+      // 添加纸张发光效果
+      parchment.classList.add(`shadow-glow`);
+      
+      // 渐显动画
+      setTimeout(() => {
+        hiddenMessage.style.opacity = '1';
+      }, 400);
+      
+      // 设置消息消失时间（默认2分钟）
+      const duration = 120000;
+      
+      // 清除之前的计时器
+      clearTimeout(messageTimeout);
+      
+      // 消息自动消失计时器
+      messageTimeout = setTimeout(() => {
+        hideMessage();
+      }, duration);
+    }
+    
+    // 隐藏消息
+    function hideMessage() {
+      hiddenMessage.style.opacity = '0';
+      parchment.classList.remove(`shadow-glow`);
+      
+      setTimeout(() => {
+        isShowing = false;
+        movementCounter = 0; // 重置计数器
+        // 随机选择下一条消息
+        currentSecret = secretMessages[Math.floor(Math.random() * secretMessages.length)];
+      }, 1500);
+    }
+    
+    // 移动端长按复制功能
+    parchment.addEventListener('touchstart', (e) => {
+      // 显示长按提示
+      longPressHint.style.opacity = '0.7';
+      
+      // 如果尚未显示文字，先显示
+      if (!isShowing) {
+        revealMessage();
+      }
+      
+      // 设置长按计时器
+      pressTimer = setTimeout(() => {
+        // 复制文字到剪贴板
+        navigator.clipboard.writeText(currentSecret).then(() => {
+          // 显示复制成功提示
+          longPressHint.textContent = '已复制!';
+          longPressHint.style.opacity = '1';
+          
+          setTimeout(() => {
+            longPressHint.textContent = '长按复制';
+            longPressHint.style.opacity = '0.7';
+          }, 1500);
+        }).catch(err => {
+          console.error('无法复制内容: ', err);
+        });
+      }, 800); // 长按800ms触发复制
+      
+      // 显示光轨
+      const touch = e.touches[0];
+      const rect = parchment.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      lightTrail.style.left = `${x}px`;
+      lightTrail.style.top = `${y}px`;
+      lightTrail.style.width = '24px';
+      lightTrail.style.height = '24px';
+      lightTrail.style.backgroundColor = `var(--tw-color-glow-${currentGlow})`;
+      lightTrail.style.opacity = '0.7';
+    });
+    
+    // 触摸结束时清除计时器
+    parchment.addEventListener('touchend', () => {
+      clearTimeout(pressTimer);
+      longPressHint.style.opacity = '0';
+      
+      // 光轨淡出
+      setTimeout(() => {
+        lightTrail.style.opacity = '0';
+      }, 100);
+    });
+    
+    // 触摸移动时更新光轨位置
+    parchment.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const rect = parchment.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      lightTrail.style.left = `${x}px`;
+      lightTrail.style.top = `${y}px`;
+      
+      // 移动时才显示文字
+      if (!isShowing) {
+        revealMessage();
+      }
+    }, { passive: false });
+  </script>
+</body>
+</html>

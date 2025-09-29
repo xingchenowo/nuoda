@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你必定会 终末的尽头...</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #keywordInput {
+            width: 350px;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        #keywordInput:focus {
+            border-color: #66afe9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
+        }
+        #submitBtn {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #submitBtn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>输入内容</h3>
+        <input 
+            type="text" 
+            id="keywordInput"
+        >
+        <br>
+        <button id="submitBtn">■■■■</button>
+    </div>
+
+    <script>
+        const inputBox = document.getElementById('keywordInput');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function checkInputAndRedirect() {
+            const inputContent = inputBox.value.trim();
+            if (inputContent === '把俊达给吞食掉喏哒') {
+                window.location.href = 'blank.html'; // 跳转到空白页
+            } else if (inputContent) {
+                alert('error');
+                inputBox.value = '';
+                inputBox.focus();
+            }
+        }
+
+        submitBtn.addEventListener('click', checkInputAndRedirect);
+
+        inputBox.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                checkInputAndRedirect();
+            }
+        });
+
+        window.onload = function() {
+            inputBox.focus();
+        };
+    </script>
+</body>
+</html>
